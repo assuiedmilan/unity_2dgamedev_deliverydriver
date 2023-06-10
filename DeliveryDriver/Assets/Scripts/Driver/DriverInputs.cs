@@ -35,6 +35,15 @@ public partial class @DriverInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Moving"",
+                    ""type"": ""Button"",
+                    ""id"": ""d571649a-ca0e-461b-bfe4-94a7235b44bf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -52,7 +61,7 @@ public partial class @DriverInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""negative"",
                     ""id"": ""004c4add-8e37-443e-807a-ba0b7a32c6ea"",
-                    ""path"": ""<Keyboard>/a"",
+                    ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Default"",
@@ -63,7 +72,7 @@ public partial class @DriverInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""positive"",
                     ""id"": ""1d8c6440-33c0-4105-8ea0-84f00d0b1ccb"",
-                    ""path"": ""<Keyboard>/d"",
+                    ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Default"",
@@ -85,7 +94,7 @@ public partial class @DriverInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""negative"",
                     ""id"": ""55486a9d-8596-4659-826e-f26092697b77"",
-                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Default"",
@@ -96,11 +105,77 @@ public partial class @DriverInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""positive"",
                     ""id"": ""c3b162a7-20c1-4eae-81f8-c6ae83369282"",
-                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Default"",
                     ""action"": ""Steering"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""874dbaf9-1550-4aff-b7e8-ff44ac11c23d"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Moving"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""a66c335d-0a53-416c-9896-cfacebca9f0b"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Moving"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""60f6092e-c075-49cd-aad2-098669c21e68"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Moving"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""e953b8b1-3bc6-403f-8411-f9b728104776"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Moving"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""2d31d26c-7cd9-4a61-ba36-84cf726adeb9"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Moving"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""d58596ba-0c6d-42bd-aa98-332bb54b4b31"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Moving"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -124,6 +199,7 @@ public partial class @DriverInputs: IInputActionCollection2, IDisposable
         // Driving
         m_Driving = asset.FindActionMap("Driving", throwIfNotFound: true);
         m_Driving_Steering = m_Driving.FindAction("Steering", throwIfNotFound: true);
+        m_Driving_Moving = m_Driving.FindAction("Moving", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -186,11 +262,13 @@ public partial class @DriverInputs: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Driving;
     private List<IDrivingActions> m_DrivingActionsCallbackInterfaces = new List<IDrivingActions>();
     private readonly InputAction m_Driving_Steering;
+    private readonly InputAction m_Driving_Moving;
     public struct DrivingActions
     {
         private @DriverInputs m_Wrapper;
         public DrivingActions(@DriverInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Steering => m_Wrapper.m_Driving_Steering;
+        public InputAction @Moving => m_Wrapper.m_Driving_Moving;
         public InputActionMap Get() { return m_Wrapper.m_Driving; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -203,6 +281,9 @@ public partial class @DriverInputs: IInputActionCollection2, IDisposable
             @Steering.started += instance.OnSteering;
             @Steering.performed += instance.OnSteering;
             @Steering.canceled += instance.OnSteering;
+            @Moving.started += instance.OnMoving;
+            @Moving.performed += instance.OnMoving;
+            @Moving.canceled += instance.OnMoving;
         }
 
         private void UnregisterCallbacks(IDrivingActions instance)
@@ -210,6 +291,9 @@ public partial class @DriverInputs: IInputActionCollection2, IDisposable
             @Steering.started -= instance.OnSteering;
             @Steering.performed -= instance.OnSteering;
             @Steering.canceled -= instance.OnSteering;
+            @Moving.started -= instance.OnMoving;
+            @Moving.performed -= instance.OnMoving;
+            @Moving.canceled -= instance.OnMoving;
         }
 
         public void RemoveCallbacks(IDrivingActions instance)
@@ -239,5 +323,6 @@ public partial class @DriverInputs: IInputActionCollection2, IDisposable
     public interface IDrivingActions
     {
         void OnSteering(InputAction.CallbackContext context);
+        void OnMoving(InputAction.CallbackContext context);
     }
 }

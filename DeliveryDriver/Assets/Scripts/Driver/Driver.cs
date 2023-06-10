@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Driver : MonoBehaviour
 {
@@ -10,6 +9,9 @@ public class Driver : MonoBehaviour
     
     [SerializeField]
     float translationRate = 0.1f;
+        
+    DriverInputs m_DriverInputs;
+    DriverInputs.DrivingActions m_DrivingActions;
     
     void Awake()
     {
@@ -19,13 +21,29 @@ public class Driver : MonoBehaviour
 
     void FixedUpdate()
     {
-        transform.Translate(0, translationRate, 0, Space.Self);
+        DoSteer();
     }
     
-    void DoSteer(InputAction.CallbackContext obj)
+    
+    void DoSteer()
     {
-        transform.Rotate(0, 0, rotationRate);
-        Debug.Log("Rotating !");
+        float movingValue = 0;
+        var isMoving = false;
+        
+        if(m_DrivingActions.Moving.IsPressed())
+        {
+            movingValue = m_DrivingActions.Moving.ReadValue<float>();
+            transform.Translate(0, movingValue * translationRate, 0);
+            
+            isMoving = movingValue != 0;
+        }
+        
+        if(m_DrivingActions.Steering.IsPressed() && isMoving)
+        {
+            var steeringValue = m_DrivingActions.Steering.ReadValue<float>();
+            transform.Rotate(0, 0, steeringValue * rotationRate * 1/movingValue);
+        }
+        
     }
 
     static void SetRefreshRate()
@@ -35,10 +53,9 @@ public class Driver : MonoBehaviour
     
     void RegisterInputsCallbacks()
     {
-        var inputActions = new DriverInputs();
-        inputActions.Enable();
-        
-        inputActions.Driving.Steering.performed += DoSteer;
+        m_DriverInputs = new DriverInputs();
+        m_DriverInputs.Enable();
+        m_DrivingActions = m_DriverInputs.Driving;
     }
 
 
