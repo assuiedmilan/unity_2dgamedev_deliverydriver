@@ -1,0 +1,41 @@
+editor: !Profile
+  name: in_editor_tests
+  enable-code-coverage: true
+  coverage-options: generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;assemblyFilters:+*Unity.Quality.Testing.Tools*
+  artifacts_path: test-editor-results
+  suites:
+    - name: editor
+      arguments:
+        platform: Editor
+    - name: playmode
+      arguments:
+        platform: Editor
+standalone_win: !Profile
+  name: build_test
+  enable-code-coverage: false
+  artifacts_path: test-standalone-results
+  suites:
+    - name: playmode
+      arguments:
+        platform: StandaloneWindows64
+        
+windows_build: !BuildProject
+  platform: Windows
+  options:
+    buildTarget: Win64
+    buildWindows64Player: build_test/BuildProjectTest.exe
+    logFile: build_test/logs
+  
+osx_build: !BuildProject
+  platform: Darwin
+  options:
+    buildTarget: OSXUniversal
+    buildOSXUniversalPlayer: build_test/BuildProjectTest.app
+    logFile: build_test/logs
+  
+unix_build: !BuildProject
+  platform: Linux
+  options:
+    buildTarget: Linux64
+    buildLinux64Player: build_test/BuildProjectTest
+    logFile: build_test/logs

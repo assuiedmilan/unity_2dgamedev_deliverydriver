@@ -13,6 +13,9 @@ public class Driver : MonoBehaviour
     DriverInputs m_DriverInputs;
     DriverInputs.DrivingActions m_DrivingActions;
     
+    bool isMoving => m_DrivingActions.Moving.IsPressed();
+    bool isSteering => m_DrivingActions.Steering.IsPressed();
+    
     void Awake()
     {
         SetRefreshRate();
@@ -21,28 +24,26 @@ public class Driver : MonoBehaviour
 
     void FixedUpdate()
     {
+        DoMove();
         DoSteer();
     }
-    
-    
+
+    void DoMove()
+    {
+        if(isMoving)
+        {
+            var movingValue = m_DrivingActions.Moving.ReadValue<float>();
+            transform.Translate(0, movingValue * translationRate, 0);
+        }
+    }
+
     void DoSteer()
     {
-        float movingValue = 0;
-        var isMoving = false;
-        
-        if(m_DrivingActions.Moving.IsPressed())
-        {
-            movingValue = m_DrivingActions.Moving.ReadValue<float>();
-            transform.Translate(0, movingValue * translationRate, 0);
-            
-            isMoving = movingValue != 0;
-        }
-        
-        if(m_DrivingActions.Steering.IsPressed() && isMoving)
-        {
-            var steeringValue = m_DrivingActions.Steering.ReadValue<float>();
-            transform.Rotate(0, 0, steeringValue * rotationRate * 1/movingValue);
-        }
+       if(isSteering && isMoving)
+       {
+           var steeringValue = m_DrivingActions.Steering.ReadValue<float>();
+           transform.Rotate(0, 0, steeringValue * rotationRate);
+       }
         
     }
 
@@ -57,6 +58,4 @@ public class Driver : MonoBehaviour
         m_DriverInputs.Enable();
         m_DrivingActions = m_DriverInputs.Driving;
     }
-
-
 }
