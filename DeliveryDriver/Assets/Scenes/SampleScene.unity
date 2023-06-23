@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationRate: 1
-  translationRate: 0.1
+  translationRate: 0.01
 --- !u!212 &1406467779
 SpriteRenderer:
   m_ObjectHideFlags: 0

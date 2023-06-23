@@ -8,7 +8,7 @@ public class Driver : MonoBehaviour
     float rotationRate = 1f;
     
     [SerializeField]
-    float translationRate = 0.1f;
+    float translationRate = 0.01f;
         
     DriverInputs m_DriverInputs;
     DriverInputs.DrivingActions m_DrivingActions;
@@ -26,6 +26,7 @@ public class Driver : MonoBehaviour
     {
         DoMove();
         DoSteer();
+         
     }
 
     void DoMove()
