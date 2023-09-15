@@ -8,11 +8,14 @@ public class BundledObjectLoader : MonoBehaviour
     
     void Start()
     {
-        var localAssetBundle = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, bundleName));
+        var localAssetBundlePath = Application.streamingAssetsPath;
+        var localAssetBundle = AssetBundle.LoadFromFile(Path.Combine(localAssetBundlePath, bundleName));
+        
+        Debug.Log($"Trying to load assets at path {localAssetBundlePath}");
         
         if (localAssetBundle == null)
         {
-            Debug.LogError("Failed to load AssetBundle !");
+            Debug.LogError($"Failed to load AssetBundle {Path.Combine(localAssetBundlePath, bundleName)}!");
             return;
         }
         
