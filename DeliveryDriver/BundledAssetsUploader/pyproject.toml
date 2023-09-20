@@ -3,7 +3,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "aws_upload"
+name = "BundledAssetUploader"
 version = "1.0.0"
 description = "Upload bundles to AWS"
 authors = ["Milan Assuied <Milan.assuied@unity3d.com>"]
@@ -17,12 +17,13 @@ url = "https://artifactory.prd.it.unity3d.com/artifactory/api/pypi/pypi/simple"
 default = true
 
 [tool.poetry.scripts]
+upload_to_aws = 'entry_points.upload_to_aws:main'
 
 [tool.poetry.dependencies]
 python = "^3.7"
 pywin32 = {version = "^303", platform = "win32"}
-boto3 = "*"
-
+boto3 = "1.28.50"
+coloredlogs = "15.0.1"
 
 [tool.poetry.dev-dependencies]
 pyinstaller = "*"
