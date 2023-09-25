@@ -11,22 +11,17 @@ packages = [
     { include = "aws_upload", from = "src" },
 ]
 
-[[tool.poetry.source]]
-name = "unity-internal"
-url = "https://artifactory.prd.it.unity3d.com/artifactory/api/pypi/pypi/simple"
-default = true
-
 [tool.poetry.scripts]
-upload_to_aws = 'entry_points.upload_to_aws:main'
+upload_to_aws = 'aws_upload.entry_points.upload_to_aws:main'
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "<3.13,>=3.7"
 pywin32 = {version = "^303", platform = "win32"}
 boto3 = "1.28.50"
 coloredlogs = "15.0.1"
 
 [tool.poetry.dev-dependencies]
-pyinstaller = "*"
+pyinstaller = "5.13.2"
 more_itertools = "*"
 pylint = "3.0.0a4"
 pytest = "*"

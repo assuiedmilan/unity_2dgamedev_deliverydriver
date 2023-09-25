@@ -19,6 +19,8 @@ S3 = boto3.client("s3", region_name=AWS_REGION, aws_access_key_id=AWS_ACCESS_KEY
 def upload_files(arguments: argparse.Namespace) -> None:
     """Upload the files from the given path to the given bucket"""
 
+    LOGGER.info("Uploading files located at %s to bucket %s under %s", arguments.path_to_assets, arguments.bucket, arguments.amazon_key_root)
+    
     for root, _, files in os.walk(arguments.path_to_assets):
         for file in files:
 
