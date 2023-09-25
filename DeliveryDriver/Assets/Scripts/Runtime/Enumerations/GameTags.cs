@@ -2,7 +2,7 @@
 
 namespace Unity.DeliveryDriver.Editor.Enumerations
 {
-    enum GameTags
+    public enum GameTags
     {
         Package,
         Customer
