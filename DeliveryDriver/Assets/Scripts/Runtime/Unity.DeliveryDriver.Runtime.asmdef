@@ -1,6 +1,6 @@
 {
     "name": "Unity.DeliveryDriver.Runtime",
-    "rootNamespace": "",
+    "rootNamespace": "Unity.DeliveryDriver",
     "references": [
         "GUID:75469ad4d38634e559750d17036d5f7c"
     ],

@@ -1,16 +1,21 @@
+using System;
 using UnityEditor;
+using UnityEngine;
 
-public static class CreateAssetBundles
+namespace Unity.DeliveryDriver.Editor.Bundles
 {
-    [MenuItem("Assets/Asset Bundles/Build AssetBundles")]
-    static void BuildAllAssetBundles()
+    public static class CreateAssetBundles
     {
-        const string assetBundleDirectory = "AssetsBundles/Windows/001";
-        if (!System.IO.Directory.Exists(assetBundleDirectory))
+        [MenuItem("Assets/Asset Bundles/Build AssetBundles")]
+        static void BuildAllAssetBundles()
         {
-            System.IO.Directory.CreateDirectory(assetBundleDirectory);
-        }
+            var assetBundleDirectory = Application.streamingAssetsPath;
+            if (!System.IO.Directory.Exists(assetBundleDirectory))
+            {
+                System.IO.Directory.CreateDirectory(assetBundleDirectory);
+            }
         
-        BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.None, EditorUserBuildSettings.activeBuildTarget);
+            BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.None, EditorUserBuildSettings.activeBuildTarget);
+        }
     }
 }

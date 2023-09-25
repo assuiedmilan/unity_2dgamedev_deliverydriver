@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Unity.DeliveryDriver.Editor.Tags
+namespace Unity.DeliveryDriver.Editor.Enumerations
 {
     public static class EnumHelper
     {

@@ -1,6 +1,6 @@
 {
     "name": "Unity.DeliveryDriver.Editor",
-    "rootNamespace": "",
+    "rootNamespace": "Unity.DeliveryDriver",
     "references": [],
     "includePlatforms": [
         "Editor"

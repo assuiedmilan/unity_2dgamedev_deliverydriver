@@ -1,23 +1,26 @@
 using System;
 using UnityEngine;
 
-public class FollowObject : MonoBehaviour
+namespace Unity.DeliveryDriver.Runtime.Cameras
 {
-    [SerializeField]
-    GameObject objectToFollow;
-    
-    Vector3 m_ZPosition;
-
-    void Awake()
+    public class FollowObject : MonoBehaviour
     {
-        m_ZPosition = new Vector3(0, 0, transform.position.z);
-    }
+        [SerializeField]
+        GameObject objectToFollow;
+        
+        Vector3 m_ZPosition;
 
-    void LateUpdate()
-    {
-        if(objectToFollow != null)
+        void Awake()
         {
-            transform.position = objectToFollow.transform.position + m_ZPosition;
+            m_ZPosition = new Vector3(0, 0, transform.position.z);
+        }
+
+        void LateUpdate()
+        {
+            if(objectToFollow != null)
+            {
+                transform.position = objectToFollow.transform.position + m_ZPosition;
+            }
         }
     }
 }

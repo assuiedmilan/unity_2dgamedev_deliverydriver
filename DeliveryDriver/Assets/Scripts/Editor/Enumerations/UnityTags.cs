@@ -1,4 +1,6 @@
-﻿namespace Unity.DeliveryDriver.Editor.Tags
+﻿using System;
+
+namespace Unity.DeliveryDriver.Editor.Enumerations
 {
     enum UnityTags
     {

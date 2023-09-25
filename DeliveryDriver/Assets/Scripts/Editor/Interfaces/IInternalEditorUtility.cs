@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Unity.DeliveryDriver.Interfaces
+namespace Unity.DeliveryDriver.Editor.Interfaces
 {
     public interface IInternalEditorUtility
     {
