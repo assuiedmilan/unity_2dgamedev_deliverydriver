@@ -5,6 +5,8 @@ namespace Unity.DeliveryDriver.Editor.Enumerations
     public enum GameTags
     {
         Package,
-        Customer
+        Customer,
+        Boost,
+        Bump,
     }
 }
