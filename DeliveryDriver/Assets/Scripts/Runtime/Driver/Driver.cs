@@ -44,7 +44,7 @@ namespace Unity.DeliveryDriver.Runtime.Driver
 
         void DoSteer()
         {
-            if (isSteering && isMoving)
+            if (isSteering)
             {
                 var steeringValue = m_DrivingActions.Steering.ReadValue<float>();
                 transform.Rotate(0, 0, steeringValue * rotationRate * m_FixedUpdateStepTime);
