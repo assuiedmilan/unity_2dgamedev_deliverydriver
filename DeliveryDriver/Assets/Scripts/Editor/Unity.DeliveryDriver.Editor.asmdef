@@ -2,7 +2,8 @@
     "name": "Unity.DeliveryDriver.Editor",
     "rootNamespace": "Unity.DeliveryDriver",
     "references": [
-        "GUID:d0333ebe3bcf3d040bdaf76da092c428"
+        "GUID:d0333ebe3bcf3d040bdaf76da092c428",
+        "GUID:b6d541d28694bb04ba328b407452d67c"
     ],
     "includePlatforms": [
         "Editor"
