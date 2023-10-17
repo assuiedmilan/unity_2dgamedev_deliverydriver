@@ -18,14 +18,14 @@ def parse_zip_folder_args() -> argparse.Namespace:
 
     parser = argparse.ArgumentParser(description=parse_zip_folder_args.__doc__, formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('-s', "--source_folder", type=str)
-    parser.add_argument('-n', '--name', default="", type=str)
+    parser.add_argument('-d', '--destination', default="", type=str)
     parser.add_argument('-env', '--environment_variables', default="", type=str, nargs="+", help="List of environment variables that will be added to the archive name, in the form of a space separated string of name/value pairs. Example: -env VAR1 VAR1 will add \"_VALUE_OF_VAR1_VALUE_OF_VAR2 \" to the archive name")
 
     args = parser.parse_args()
     args.source_folder = resolve_path_relative_to_git_root(args.source_folder)
-    args.name = resolve_path_relative_to_git_root(args.name)
+    args.destination = resolve_path_relative_to_git_root(args.destination)
 
-    args.name = add_env_variable_values_to_string(args.name, args.environment_variables)
+    args.name = add_env_variable_values_to_string(args.destination, args.environment_variables)
 
     return args
 
@@ -51,9 +51,12 @@ def zip_folder(folder_path: str, output_filename: str, **kwargs):
 
     check_is_directory(folder_path)
 
-    output_filename = output_filename + ZIPFILE_EXT if not output_filename.endswith(ZIPFILE_EXT) else output_filename
+    zip_file_path = output_filename + ZIPFILE_EXT if not output_filename.endswith(ZIPFILE_EXT) else output_filename
     folder_path = Path(folder_path)
-    zip_file_path = os.path.join(os.getcwd(), output_filename)
+
+    parent_directory = os.path.dirname(zip_file_path)
+    if not os.path.exists(parent_directory):
+        os.makedirs(parent_directory)
 
     with zipfile.ZipFile(zip_file_path, 'w', **kwargs) as zipf:
         for file_path in folder_path.rglob("*"):

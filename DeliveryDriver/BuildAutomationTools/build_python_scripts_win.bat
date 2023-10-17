@@ -1,3 +1,4 @@
+poetry lock
 poetry install
 poetry run pyinstaller --onefile .\src\build_automation_tools\entry_points\upload_to_aws.py --exclude-module _bootlocale
 poetry run pyinstaller --onefile .\src\build_automation_tools\entry_points\zip_folder.py --exclude-module _bootlocale

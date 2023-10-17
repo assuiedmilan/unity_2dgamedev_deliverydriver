@@ -2,7 +2,10 @@ import os
 from pathlib import Path
 from typing import Optional, Callable
 
-from build_automation_tools.entry_points.zip_folder import LOGGER
+from build_automation_tools.logging_configuration.logging import get_logger
+
+
+LOGGER = get_logger(__name__)
 
 
 def resolve_path_relative_to_git_root(path_to_resolve: Optional[str]) -> Optional[str]:
