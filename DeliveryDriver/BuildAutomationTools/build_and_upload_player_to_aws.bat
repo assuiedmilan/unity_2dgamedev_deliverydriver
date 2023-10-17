@@ -1,10 +1,10 @@
 REM D:\UnityDownloader\2022.3.0f1\unity.exe --batchmode --quit --silent --projectPath . --buildTarget Win64 --buildWindows64Player ../build/delivery_driver/delivery_driver.exe 
 
 echo Moving to automation tools folder from: %CD%
-cd BuildAutomationTools 
+cd DeliveryDriver\BuildAutomationTools 
 
 echo Building player from directory: %CD%
-call unity.exe --batchmode --quit --silent --projectPath . --buildTarget Win64 --buildWindows64Player ../build/delivery_driver/delivery_driver.exe --logFile build_log
+call unity.exe --batchmode --quit --silent --projectPath .. --buildTarget Win64 --buildWindows64Player ../build/delivery_driver/delivery_driver.exe --logFile build_log
 
 echo Creating upload folder from: %CD%
 mkdir build_upload
