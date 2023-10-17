@@ -1,7 +1,11 @@
 REM D:\UnityDownloader\2022.3.0f1\unity.exe --batchmode --quit --silent --projectPath . --executeMethod Unity.DeliveryDriver.Editor.Build.BuildSetup.RunBatchModeBuild
 
+cd DeliveryDriver\build
+echo Listing files at: %CD%
+dir
+
 echo Moving to automation tools folder from: %CD%
-cd DeliveryDriver\BuildAutomationTools 
+cd ..\BuildAutomationTools 
 
 echo Creating upload folder from: %CD%
 mkdir ..\build_upload
