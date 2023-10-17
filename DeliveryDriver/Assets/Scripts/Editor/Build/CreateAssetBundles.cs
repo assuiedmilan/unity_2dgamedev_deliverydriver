@@ -2,11 +2,11 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace Unity.DeliveryDriver.Editor.Bundles
+namespace Unity.DeliveryDriver.Editor.Build
 {
     public static class CreateAssetBundles
     {
-        [MenuItem("Assets/Asset Bundles/Build AssetBundles")]
+        [MenuItem("DeliveryDriver/Build AssetBundles")]
         static void BuildAllAssetBundles()
         {
             var assetBundleDirectory = Application.streamingAssetsPath;
