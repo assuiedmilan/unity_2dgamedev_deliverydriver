@@ -3,16 +3,17 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "BundledAssetUploader"
+name = "Build Automation Tools"
 version = "1.0.0"
-description = "Upload bundles to AWS"
+description = "Upload items to AWS, zip files, help with UCB"
 authors = ["Milan Assuied <Milan.assuied@unity3d.com>"]
 packages = [
-    { include = "aws_upload", from = "src" },
+    { include = "build_automation_tools", from = "src" },
 ]
 
 [tool.poetry.scripts]
 upload_to_aws = 'aws_upload.entry_points.upload_to_aws:main'
+zip_folder = 'aws_upload.entry_points.zip_folder:main'
 
 [tool.poetry.dependencies]
 python = "<3.13,>=3.7"

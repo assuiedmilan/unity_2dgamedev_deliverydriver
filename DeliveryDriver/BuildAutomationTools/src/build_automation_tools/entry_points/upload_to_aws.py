@@ -1,14 +1,16 @@
 """Upload entry point"""
-
 import argparse
 import os
 from pathlib import Path
 
 import boto3
 
-from aws_upload.logging_configuration.logging import get_logger
+from build_automation_tools.system.paths_resolutions import resolve_path_relative_to_git_root
+from build_automation_tools.logging_configuration.logging import get_logger
+
 
 LOGGER = get_logger(__name__)
+
 
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
@@ -20,7 +22,7 @@ def upload_files(arguments: argparse.Namespace) -> None:
     """Upload the files from the given path to the given bucket"""
 
     LOGGER.info("Uploading files located at %s to bucket %s under %s", arguments.path_to_assets, arguments.bucket, arguments.amazon_key_root)
-    
+
     for root, _, files in os.walk(arguments.path_to_assets):
         for file in files:
 
@@ -81,7 +83,7 @@ def parse_arguments():
     parser.add_argument('-a', '--amazon_key_root', type=str, help='First key folder located under the bucket, sub-folders will be derived from the child folders structure located under the path_to_asset argument.')
 
     arguments = parser.parse_args()
-    arguments.path_to_assets = os.path.normpath(os.path.join(os.getcwd(), arguments.path_to_assets))
+    arguments.path_to_assets = resolve_path_relative_to_git_root(arguments.path_to_assets)
     return arguments
 
 

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/BundledAssetsUploader.iml" filepath="$PROJECT_DIR$/.idea/BundledAssetsUploader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/BuildAutomationTools.iml" filepath="$PROJECT_DIR$/.idea/BuildAutomationTools.iml" />
     </modules>
   </component>
 </project>

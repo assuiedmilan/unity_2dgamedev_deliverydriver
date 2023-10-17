@@ -2,7 +2,6 @@
 
 import logging
 import os
-import sys
 from pathlib import Path
 
 import coloredlogs
@@ -10,7 +9,7 @@ import coloredlogs
 LOG_FOLDER = os.path.join(os.path.dirname(Path(__file__).parent.resolve()), "Logs")
 Path(LOG_FOLDER).mkdir(parents=True, exist_ok=True)
 
-ROOT_PACKAGE = os.path.basename(Path(os.path.dirname(sys.modules['__main__'].__file__)).parent)
+ROOT_PACKAGE = 'aws_upload'
 DEBUG_LOG = os.path.join(LOG_FOLDER, f"{ROOT_PACKAGE}_debug.log")
 ERROR_LOG = os.path.join(LOG_FOLDER, f"{ROOT_PACKAGE}_error.log")
 CRITICAL_LOG = os.path.join(LOG_FOLDER, f"{ROOT_PACKAGE}_critical.log")
