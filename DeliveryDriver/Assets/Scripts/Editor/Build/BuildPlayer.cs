@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace Unity.DeliveryDriver.Editor.Build
 {
-    [InitializeOnLoad]
     public static class BuildSetup
     {
         static string playerName
@@ -16,7 +15,7 @@ namespace Unity.DeliveryDriver.Editor.Build
             {
                 return Application.platform switch
                 {
-                    RuntimePlatform.WindowsEditor => "delivery_driver.exe",
+                    RuntimePlatform.WindowsEditor => "delivery_driver_batchmode_build.exe",
                     _ => throw new Exception($"Unsupported platform {Application.platform}")
                 };
             }
@@ -24,21 +23,11 @@ namespace Unity.DeliveryDriver.Editor.Build
         
         static string defaultBuildPath => Path.Combine(Application.dataPath, "..", "build", playerName);
         
-        static BuildSetup()
-        {
-            BuildPlayerWindow.RegisterBuildPlayerHandler(OnBuild);
-        }
-        
-        static void OnBuild(BuildPlayerOptions options)
-        {
-            BuildPipeline.BuildPlayer(options);
-        }
-        
         [UsedImplicitly]
         [MenuItem("DeliveryDriver/Build Player")]
         public static void RunBatchModeBuild()
         {
-            OnBuild(ProcessBuildOptions());
+            BuildPipeline.BuildPlayer((ProcessBuildOptions()));
         }
         
         static BuildPlayerOptions ProcessBuildOptions()
@@ -47,6 +36,7 @@ namespace Unity.DeliveryDriver.Editor.Build
             
             buildOptions.assetBundleManifestPath = "";
             buildOptions.scenes = EditorBuildSettings.scenes.Select(p => p.path).ToArray();
+            buildOptions.scenes[0] = "Assets/Scenes/SampleScene2.unity";
             buildOptions.target = EditorUserBuildSettings.activeBuildTarget;
             buildOptions.targetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
             buildOptions.locationPathName = GetBuildPath(buildOptions);
@@ -87,12 +77,7 @@ namespace Unity.DeliveryDriver.Editor.Build
         {
             var locationPathName = EditorUserBuildSettings.GetBuildLocation(options.target);
             
-            if (string.IsNullOrEmpty(locationPathName))
-            {
-                locationPathName = defaultBuildPath;
-            }
-            
-            return locationPathName;
+            return string.IsNullOrEmpty(locationPathName) ? defaultBuildPath : Path.Combine(Path.GetDirectoryName(locationPathName) ?? string.Empty, playerName);
         }
     }
 }
