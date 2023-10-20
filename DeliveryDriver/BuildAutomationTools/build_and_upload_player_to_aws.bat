@@ -1,14 +1,16 @@
 REM D:\UnityDownloader\2022.3.0f1\unity.exe --batchmode --quit --silent --projectPath . --executeMethod Unity.DeliveryDriver.Editor.Build.BuildSetup.RunBatchModeBuild
 
-cd DeliveryDriver\build
+echo Initial directory: %CD%
+
+cd DeliveryDriver
 echo Listing files at: %CD%
 dir
 
 echo Moving to automation tools folder from: %CD%
-cd ..\BuildAutomationTools 
+cd BuildAutomationTools 
 
 echo Creating upload folder from: %CD%
-set archive_target=../../build
+set archive_target=../build_to_aws
 mkdir %archive_target%
 
 echo Calling zip from: %CD%

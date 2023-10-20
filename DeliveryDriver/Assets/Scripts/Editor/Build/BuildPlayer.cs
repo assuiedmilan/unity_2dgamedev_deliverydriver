@@ -22,15 +22,31 @@ namespace Unity.DeliveryDriver.Editor.Build
         }
         
         static string defaultBuildPath => Path.Combine(Application.dataPath, "..", "build", playerName);
+
+        /// <summary>
+        /// Method <c>ReplaceUcDefaultBuildByBatchModeBuild</c> generate the custom build and replace the existing UCB build with the updated one.
+        /// This allows to generate and archive a custom build on UCB as an artifact.
+        /// </summary>
+        [UsedImplicitly]
+        public static void ReplaceUcDefaultBuildByBatchModeBuild(string pathToOriginalPlayer)
+        {
+            Debug.Log($"Received path to existing UCB Build: {pathToOriginalPlayer}");
+            BuildPlayer(pathToOriginalPlayer);
+        }
         
         [UsedImplicitly]
         [MenuItem("DeliveryDriver/Build Player")]
         public static void RunBatchModeBuild()
         {
-            BuildPipeline.BuildPlayer((ProcessBuildOptions()));
+            BuildPlayer();
         }
         
-        static BuildPlayerOptions ProcessBuildOptions()
+        static void BuildPlayer(string existingPlayerLocation = null)
+        {
+            BuildPipeline.BuildPlayer((ProcessBuildOptions(existingPlayerLocation)));
+        }
+        
+        static BuildPlayerOptions ProcessBuildOptions(string existingPlayerLocation = null)
         {
             var buildOptions = new BuildPlayerOptions();
             
@@ -39,9 +55,16 @@ namespace Unity.DeliveryDriver.Editor.Build
             buildOptions.scenes[0] = "Assets/Scenes/SampleScene2.unity";
             buildOptions.target = EditorUserBuildSettings.activeBuildTarget;
             buildOptions.targetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
-            buildOptions.locationPathName = GetBuildPath(buildOptions);
             
-            CreateBuildFolder(buildOptions.locationPathName);
+            if (existingPlayerLocation == null)
+            {
+                buildOptions.locationPathName = GetBuildPath(buildOptions);
+                CreateBuildFolder(buildOptions.locationPathName);
+            }
+            else
+            {
+                buildOptions.locationPathName = existingPlayerLocation;
+            }
             
             Debug.Log($"Target is {buildOptions.target}, group {buildOptions.targetGroup} and location should be {buildOptions.locationPathName}");
             
