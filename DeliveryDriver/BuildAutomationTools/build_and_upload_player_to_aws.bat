@@ -10,7 +10,7 @@ echo Moving to automation tools folder from: %CD%
 cd BuildAutomationTools 
 
 echo Creating upload folder from: %CD%
-set archive_target=../build_to_aws
+set archive_target=..\build_to_aws
 mkdir %archive_target%
 
 echo Calling zip from: %CD%

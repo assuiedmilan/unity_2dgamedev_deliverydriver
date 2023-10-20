@@ -7,6 +7,25 @@ using UnityEngine;
 
 namespace Unity.DeliveryDriver.Editor.Build
 {
+	public static class DirectoryInfoExtensions 
+    { 
+        public static void DeepCopy(this DirectoryInfo directory, string destinationDir) 
+        { 
+            Debug.Log($"Copying build from {directory} to {destinationDir}");
+            
+            foreach (var dir in Directory.GetDirectories(directory.FullName, "*", SearchOption.AllDirectories)) 
+            {
+                var dirToCreate = dir.Replace(directory.FullName, destinationDir); 
+                Directory.CreateDirectory(dirToCreate); 
+            } 
+            
+            foreach (string newPath in Directory.GetFiles(directory.FullName, "*.*", SearchOption.AllDirectories)) 
+            { 
+                File.Copy(newPath, newPath.Replace(directory.FullName, destinationDir), true); 
+            } 
+        } 
+    }
+	
     public static class BuildSetup
     {
         static string playerName
@@ -25,13 +44,19 @@ namespace Unity.DeliveryDriver.Editor.Build
 
         /// <summary>
         /// Method <c>ReplaceUcDefaultBuildByBatchModeBuild</c> generate the custom build and replace the existing UCB build with the updated one.
+        /// Since UCB has unpredictable build output folder, the build will also be copied (do not move, for archive) at a pre-defined location.
         /// This allows to generate and archive a custom build on UCB as an artifact.
         /// </summary>
         [UsedImplicitly]
         public static void ReplaceUcDefaultBuildByBatchModeBuild(string pathToOriginalPlayer)
         {
             Debug.Log($"Received path to existing UCB Build: {pathToOriginalPlayer}");
-            BuildPlayer(pathToOriginalPlayer);
+            var buildOptions = BuildPlayer(pathToOriginalPlayer);
+            
+            var ucbBuildLocation = Directory.GetParent(pathToOriginalPlayer);
+            var finalBuildLocation = ComputeBuildOutputFolder(buildOptions);
+            
+            ucbBuildLocation.DeepCopy(finalBuildLocation);
         }
         
         [UsedImplicitly]
@@ -41,9 +66,18 @@ namespace Unity.DeliveryDriver.Editor.Build
             BuildPlayer();
         }
         
-        static void BuildPlayer(string existingPlayerLocation = null)
+        static BuildPlayerOptions BuildPlayer(string existingPlayerLocation = null)
         {
-            BuildPipeline.BuildPlayer((ProcessBuildOptions(existingPlayerLocation)));
+            var options = ProcessBuildOptions(existingPlayerLocation);
+            BuildPipeline.BuildPlayer(options);
+            return options;
+        }
+        
+        private static string ComputeBuildOutputFolder(BuildPlayerOptions buildOptions) {
+            var locationPathName = GetBuildPath(buildOptions);
+            CreateBuildFolder(locationPathName);
+            
+            return locationPathName;
         }
         
         static BuildPlayerOptions ProcessBuildOptions(string existingPlayerLocation = null)
@@ -58,8 +92,7 @@ namespace Unity.DeliveryDriver.Editor.Build
             
             if (existingPlayerLocation == null)
             {
-                buildOptions.locationPathName = GetBuildPath(buildOptions);
-                CreateBuildFolder(buildOptions.locationPathName);
+                buildOptions.locationPathName = ComputeBuildOutputFolder(buildOptions);
             }
             else
             {
