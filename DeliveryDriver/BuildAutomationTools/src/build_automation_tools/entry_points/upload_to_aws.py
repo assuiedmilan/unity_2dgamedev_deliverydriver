@@ -23,36 +23,54 @@ def upload_files(arguments: argparse.Namespace) -> None:
 
     LOGGER.info("Uploading files located at %s to bucket %s under %s", arguments.path_to_assets, arguments.bucket, arguments.amazon_key_root)
 
-    for root, _, files in os.walk(arguments.path_to_assets):
-        for file in files:
-
-            local_file_path = os.path.join(root, file)
-            upload_path = extract_upload_path(Path(local_file_path), os.path.basename(arguments.path_to_assets), arguments.amazon_key_root)
-            s3_key = replace_separators_to_unix_style(upload_path)
-
-            try:
-                S3.upload_file(local_file_path, arguments.bucket, s3_key)
-                LOGGER.info("Uploaded file: %s to %s}", local_file_path, replace_separators_to_unix_style(os.path.join(arguments.bucket, s3_key)))
-            except TypeError as type_error:
-                LOGGER.error(type_error)
-                LOGGER.error("Error uploading file: %s", local_file_path)
+    if Path(arguments.path_to_assets).is_file():
+        __upload_single_file(arguments)
+    elif Path(arguments.path_to_assets).is_dir():
+        for root, _, files in os.walk(arguments.path_to_assets):
+            for file in files:
+                __upload_from_folder(os.path.join(root, file), arguments)
+    else:
+        LOGGER.error("The given path is not a file or a directory: %s", arguments.path_to_assets)
 
     LOGGER.info("Upload completed.")
 
 
-def extract_upload_path(local_file: Path, split_folder: str, s3_root_key: str) -> str:
+def __upload_single_file(arguments: argparse.Namespace):
+    upload_path = os.path.join(arguments.amazon_key_root, os.path.basename(arguments.path_to_assets))
+    __upload_file(arguments.path_to_assets, upload_path, arguments)
+
+
+def __upload_from_folder(file: str, arguments: argparse.Namespace):
+    upload_path = extract_upload_path(arguments.amazon_key_root, file, os.path.basename(arguments.path_to_assets))
+    __upload_file(file, upload_path, arguments)
+
+
+def __upload_file(file: str, upload_path: str, arguments: argparse.Namespace) -> None:
+
+    upload_path = replace_separators_to_unix_style(upload_path)
+
+    try:
+        S3.upload_file(file, arguments.bucket, upload_path)
+        LOGGER.info("Uploaded file: %s to %s}", file, replace_separators_to_unix_style(os.path.join(arguments.bucket, upload_path)))
+    except TypeError as type_error:
+        LOGGER.error(type_error)
+        LOGGER.error("Error uploading file: %s", file)
+
+
+def extract_upload_path(s3_root_key: str, local_file: str, split_at_folder: str) -> str:
     """Extract the upload path from the local file path
 
     Args:
-        local_file (Path): The local file path
-        split_folder (str): The folder to split the path on
         s3_root_key (str): First key folder located under the bucket
+        local_file (str): The local file path
+        split_at_folder (str): The folder to split the path on
 
     Returns:
         The upload path
     """
 
-    return os.path.join(s3_root_key, *local_file.parts[local_file.parts.index(split_folder)+1:])
+    local_file = Path(local_file)
+    return os.path.join(s3_root_key, *local_file.parts[local_file.parts.index(split_at_folder)+1:])
 
 
 def replace_separators_to_unix_style(path: str) -> str:

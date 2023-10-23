@@ -1,0 +1,15 @@
+# https://internaldocs.hq.unity3d.com/bokken/cli/jobs/
+
+bokken_template_version: 2017-06-01
+
+name: Windows VM
+description: VM used for the CI.
+
+resources:
+
+  - name: gpu
+    type: Unity::VM::GPU
+    image: digital_twins/win10-dt-test-framework:latest
+    flavor: i1.large
+    model: gtx1080
+    num_instances: 1

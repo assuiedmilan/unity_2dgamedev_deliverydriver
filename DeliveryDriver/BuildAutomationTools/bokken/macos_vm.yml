@@ -1,0 +1,32 @@
+# https://internaldocs.hq.unity3d.com/bokken/cli/jobs/
+# VM with Intel CPU, as per required on UCB
+
+bokken_template_version: 2017-06-01
+
+name: MacOs VM
+description: VM used for the CI.
+
+resources:
+
+  - name: intel_mac
+    type: Unity::VM::osx
+    flavor: m1.mac
+    image: slough-ops/macos-11-xcode:v0.0.2-1119246
+    num_instances: 1
+    config:
+      runcmd:
+        - brew uninstall --ignore-dependencies python3 || true
+        - HOMEBREW_PIP_INDEX_URL=https://artifactory.prd.it.unity3d.com/artifactory/bokken-generic/python/simple brew install python@3.11
+        - brew link --force python@3.11
+        - python3.11 --version
+        - python3.11 -m pip install pip --upgrade --index-url https://artifactory.prd.it.unity3d.com/artifactory/api/pypi/pypi/simple
+        - python3.11 -m pip install poetry --index-url https://artifactory.prd.it.unity3d.com/artifactory/api/pypi/pypi/simple
+        - sudo ln -sf /usr/local/bin/python3.11 /usr/local/bin/python
+        - sudo ln -sf /usr/local/bin/python3.11 /usr/local/bin/python3
+        - sudo ln -sf /usr/local/bin/pip3.11 /usr/local/bin/pip
+        - sudo ln -sf /usr/local/bin/pip3.11 /usr/local/bin/pip3
+    metadata:
+    - key: bokken.interactive
+      value: "true"
+    - key: bokken.locked
+      value: "true"
